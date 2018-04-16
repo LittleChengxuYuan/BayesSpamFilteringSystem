@@ -18,6 +18,7 @@ spamFileList = os.listdir(spamFilePath)
 
 #读取停用词表
 stopList = open("./StopWords.txt").read().split()
+#stopList = []
 #获取正常邮件的词频
 for fileName in hamFileList:
     file_object = open(hamFilePath+'/'+fileName).read()
@@ -34,4 +35,7 @@ for fileName in spamFileList:
 
 testFile = open(testFilePath).read()
 bayes.getWordList(testFile,testDict,stopList)
-print(testDict)
+
+
+wordProbDict = bayes.getTestWords(testDict,spamDict,hamDict,705,705)
+print(bayes.calBayes(wordProbDict,spamDict,hamDict))
