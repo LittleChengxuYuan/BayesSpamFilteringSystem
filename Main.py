@@ -15,6 +15,8 @@ spamFilePath = ("./spam")
 testFilePath = ("./test.txt")
 hamFileList = os.listdir(hamFilePath)
 spamFileList = os.listdir(spamFilePath)
+hamFileNum = len(hamFileList)
+spamFileNum = len(spamFileList)
 
 #读取停用词表
 stopList = open("./StopWords.txt").read().split()
@@ -37,5 +39,4 @@ testFile = open(testFilePath).read()
 bayes.getWordList(testFile,testDict,stopList)
 
 
-wordProbDict = bayes.getTestWords(testDict,spamDict,hamDict,705,705)
-print(bayes.calBayes(wordProbDict,spamDict,hamDict))
+wordProbDict = bayes.getTestWords(testDict,spamDict,hamDict,spamFileNum,hamFileNum)
