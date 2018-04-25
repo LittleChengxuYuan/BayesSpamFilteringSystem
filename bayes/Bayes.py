@@ -1,50 +1,7 @@
 import math
-import jieba
-import os
+
 class Bayes:
-    __stopList = []
-    __hamDict = {}
-    __spamDict = {}
-    __spamFileNum = 0
-    __hamFileNum = 0
-    def __init__(self,hamFilePath,spamFilePath,stopWordsFilePath):
-
-
-        __stopList = open(stopWordsFilePath,encoding="utf8").read().split()
-        self.__getWordDict(hamFilePath,self.__hamDict,__stopList)
-        self.__getWordDict(spamFilePath,self.__spamDict,__stopList)
-        self.__hamFileNum = len(os.listdir(hamFilePath))
-        self.__spamFileNum = len(os.listdir(spamFilePath))
-    
-    def getResult(self,testFile):
-        testDict = self.__getTestDict(testFile,self.__stopList)
-        return self.__getResult(testDict,self.__spamDict,self.__hamDict,self.__spamFileNum,self.__hamFileNum)
-    
-    #将传入的字符串分割为单词并保存在列表里，使用结巴分词
-    #计算wordList中单词出现的频数，并将其保存在字典中，该方法对各形式的邮件通用
-    def __getWordDict(self,filePath,wordDict,stopList):
-        fileList = os.listdir(filePath)
-        for fileName in fileList:
-            file_object = open(filePath+'/'+fileName,encoding="utf8").read()
-            res_list = jieba.lcut(file_object)
-            for i in res_list:
-                if i not in stopList and i.strip()!='' and i!=None:
-                    if i in wordDict.keys():
-                        wordDict[i]+=1
-                    else:
-                        wordDict.setdefault(i,1)
-    def __getTestDict(self,file,stopList):
-        wordDict = {}
-        res_list = open(file).read().split()
-        for i in res_list:
-            if i not in stopList and i.strip()!='' and i!=None:
-                if i in wordDict.keys():
-                    wordDict[i]+=1
-                else:
-                    wordDict.setdefault(i,1)
-        return wordDict
-    
-    def __getResult(self,testDict,spamDict,hamDict,spamFileNum,hamFileNum):
+    def getResult(self,testDict,spamDict,hamDict,spamFileNum,hamFileNum):
         #垃圾邮件的概率
         wordSpamProbDict = {}
         #正常邮件的概率
