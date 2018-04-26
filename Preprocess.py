@@ -26,7 +26,8 @@ class Preprocess:
             # print(result)
         elif algs=="SVM":
             mySVM = MySVM()
-            result = mySVM.getResult(fileDict,self.__spamDict,self.__hamDict,self.__spamFileNum,self.__hamFileNum)
+            result = mySVM.train(self.__spamDict,self.__hamDict,self.__spamFileNum,self.__hamFileNum)
+            # result = mySVM.getResult(fileDict,self.__spamDict,self.__hamDict,self.__spamFileNum,self.__hamFileNum)
         elif algs=="KNN":
             pass
         return result
