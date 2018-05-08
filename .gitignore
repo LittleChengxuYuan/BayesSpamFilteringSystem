@@ -3,7 +3,7 @@ ham/
 spam/
 test/
 test.txt
-
+out.txt
 .vscode/
 
 # Byte-compiled / optimized / DLL files
@@ -107,3 +107,4 @@ ENV/
 
 # mypy
 .mypy_cache/
+out.txt
