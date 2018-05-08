@@ -1,3 +1,11 @@
+#MyOwn 数据文件和测试文件
+ham/
+spam/
+test/
+test.txt
+
+.vscode/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
