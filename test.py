@@ -13,3 +13,4 @@ isSpam = 0
 #         isSpam = isSpam + 1
 # print(isSpam/len(testFileList))
 result = preprocess.getResult_1("SVM",testFilePath)
+print(result)
