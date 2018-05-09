@@ -2,8 +2,8 @@ import jieba
 import os
 import csv
 from bayes.Bayes import Bayes
-from MySVM.MySVM import MySVM
 
+from MySVM.MySVM import MySVM
 
 class Preprocess:
     __stopList = []
@@ -29,11 +29,11 @@ class Preprocess:
         if algs == "bayes":
             bayes = Bayes()
             result = bayes.getResult(fileDict, self.__spamDict, self.__hamDict, self.__spamFileNum, self.__hamFileNum)
-            # print(result)
+
         elif algs == "SVM":
             mySVM = MySVM()
             result = mySVM.train(self.__spamDict, self.__hamDict, self.__spamFilePath, self.__hamFilePath)
-            # result = mySVM.getResult(fileDict,self.__spamDict,self.__hamDict,self.__spamFileNum,self.__hamFileNum)
+
         elif algs == "KNN":
             pass
         return result
