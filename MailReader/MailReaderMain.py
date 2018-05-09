@@ -1,9 +1,6 @@
 # a mail reader gui program
 
-# Todo: 1.从txt文件中读取邮件
-# Todo: 2.从outlook邮箱中读取邮件
-# Todo: 3.对邮件内容进行spam/ham判别
-# Todo: 4.读取文件夹（2个 ham训练集 spam训练集 ） 读取文件路径 （分词文件）
+
 
 import re
 import sys
@@ -67,12 +64,6 @@ class MailReaderMain(QMainWindow,Ui_Form,QListWidget):
         filepath=QFileDialog.getExistingDirectory(self,'' ,'X:\\documents\\数据挖掘\\email\\email')
         self.spamPath=filepath
         self.lineEdit.setText(self.spamPath)
-        # files = os.listdir(self.spamPath)
-        # for name in files:
-        #     for ext in ".txt":
-        #         if (name.endswith(ext)):
-        #             print(name)
-        #             break
 
 
 
@@ -92,52 +83,22 @@ class MailReaderMain(QMainWindow,Ui_Form,QListWidget):
         self.lineEdit_4.setText(self.emailPath)
 
 
-
-
-
-    # def btn_readname(self):
-    #     self.spamListWidget.clear()
-    #     self.itemNum=0
-    #     filepath=QFileDialog.getExistingDirectory(self,'', 'X:\\documents\\数据挖掘\\email\\email')
-    #     files=os.listdir(filepath)
-    #     for name in files:
-    #         if(name.endswith(".txt")):
-    #             self.itemNum+=1
-    #             self.spamListWidget.addItem(name+" spam")
-    #     print (self.itemNum)
-    #     #重新设置窗体大小
-    #     controlHeight=self.itemNum*26
-    #     self.spamListWidget.setGeometry(QtCore.QRect(0,0,110,controlHeight))
-    #     self.spamWidget.setMinimumSize(130,controlHeight)
-    #
-    #     #self.listWidget.setGeometry(QtCore.QRect(50,211,51,220))
-    #     self.spamListWidget.itemClicked.connect(self.myItemClicked)
-
     def myItemClicked(self,item):
         self.textBrowser.clear()
         spaceIndex=str(item.text()).rstrip(' spamh')
-        # spaceIndex=[m.start() for m in re.finditer(' ',str(item.text()))]
-        # spaceIndex=str(spaceIndex)
         filename=self.emailPath+'\\'+spaceIndex
-        #print(filename)
         thetext=open(filename).read()
         self.textBrowser.setPlainText(thetext)
-        #print (spaceIndex)
+
 
     def startTrainButtonClicked(self):
         self.trainResult=Preprocess.Preprocess(self.hamPath,self.spamPath,self.splitData)
         self.resize(612,560)
         self.setMaximumSize(612,560)
 
-        # trainResult=Preprocess.Preprocess(self.hamPath,self.spamPath,self.splitData)
-
-        # result=trainResult.getResult_1(self.algorithm,'X:\\zTimDownload\\email\\email\\ham\\1.txt')
-        # self.textBrowser.setPlainText(open('X:\\zTimDownload\\email\\email\\ham\\1.txt').read())
-        # print(result)
-        #print(self.hamPath+self.spamPath+self.splitData)
-
     def startTestButtonClicked(self):
-        self.startTestButton.setEnabled(False)
+        self.hamListWidget.clear()
+        self.spamListWidget.clear()
         for parent,dirnames,filenames, in os.walk(self.emailPath):
             for filename in filenames:
                 thefile=os.path.join(parent,filename)
@@ -150,9 +111,9 @@ class MailReaderMain(QMainWindow,Ui_Form,QListWidget):
                     self.hamitemNum+=1
 
         spamHeight = self.spamitemNum * 26
-        self.spamListWidget.setGeometry(QtCore.QRect(0, 0, 110, spamHeight))
+        self.spamListWidget.setGeometry(QtCore.QRect(0, 0, 300, spamHeight))
         hamHeight = self.hamitemNum * 26
-        self.hamListWidget.setGeometry(QtCore.QRect(0, spamHeight, 110, hamHeight))
+        self.hamListWidget.setGeometry(QtCore.QRect(0, spamHeight, 300, hamHeight))
         controlHeight=self.hamitemNum*26+self.spamitemNum*26
         self.spamWidget.setMinimumSize(130, controlHeight)
 
