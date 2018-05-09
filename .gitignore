@@ -5,6 +5,7 @@ test/
 test.txt
 out.txt
 .vscode/
+.idea/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
