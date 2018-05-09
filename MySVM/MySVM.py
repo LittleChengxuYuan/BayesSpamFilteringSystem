@@ -67,10 +67,10 @@ class MySVM:
                         wordDict[i]+=1
                     else:
                         wordDict.setdefault(i,1)
-        for key,value in wordDict:
-            if key in wordList:
-                
-        wb.save('wordList.xlsx')
+        # for key,value in wordDict:
+        #     if key in wordList:
+        #
+        # wb.save('wordList.xlsx')
 
 
     def __getWordDict(self,filePath):

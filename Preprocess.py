@@ -2,7 +2,7 @@ import jieba
 import os
 import csv
 from bayes.Bayes import Bayes
-from MySVM.MySVM import MySVM
+#from MySVM.MySVM import MySVM
 class Preprocess:
     __stopList = []
     __hamDict = {}
@@ -25,8 +25,9 @@ class Preprocess:
             result = bayes.getResult(fileDict,self.__spamDict,self.__hamDict,self.__spamFileNum,self.__hamFileNum)
             # print(result)
         elif algs=="SVM":
-            mySVM = MySVM()
-            result = mySVM.train(self.__spamDict,self.__hamDict,self.__spamFileNum,self.__hamFileNum)
+            pass
+            #mySVM = MySVM()
+            #result = mySVM.train(self.__spamDict,self.__hamDict,self.__spamFileNum,self.__hamFileNum)
             # result = mySVM.getResult(fileDict,self.__spamDict,self.__hamDict,self.__spamFileNum,self.__hamFileNum)
         elif algs=="KNN":
             pass
@@ -37,7 +38,7 @@ class Preprocess:
         wordDict={}
         fileList = os.listdir(filePath)
         for fileName in fileList:
-            file_object = open(filePath+'/'+fileName,encoding="utf8").read()
+            file_object = open(filePath+'/'+fileName).read()
             res_list = jieba.lcut(file_object)
             for i in res_list:
                 if i not in stopList and i.strip()!='' and i!=None:
