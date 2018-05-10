@@ -253,6 +253,6 @@ class Ui_Form(object):
         self.readfileButton_4.setText(_translate("Form", "选择文件夹"))
         self.startTestButton.setText(_translate("Form", "开始测试"))
         self.comboBox.setItemText(0, _translate("Form", "贝叶斯"))
-        self.comboBox.setItemText(1, _translate("Form", "KNN"))
+        self.comboBox.setItemText(1, _translate("Form", "SVM"))
         self.label_5.setText(_translate("Form", "训练算法选择："))
 

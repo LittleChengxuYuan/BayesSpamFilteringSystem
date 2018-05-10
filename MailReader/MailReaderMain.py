@@ -1,8 +1,3 @@
-# a mail reader gui program
-
-
-
-import re
 import sys
 import os
 import os.path

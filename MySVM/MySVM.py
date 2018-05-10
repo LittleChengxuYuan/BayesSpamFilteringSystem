@@ -1,11 +1,9 @@
-from sklearn import svm
 import numpy as np
-from openpyxl import Workbook
-import openpyxl
-import json
+import pickle
 import os
 import jieba
-
+from sklearn import svm
+from sklearn.externals import joblib
 
 # 根据SVM函数特性编码，针对每一篇短文获取频率最高的十五单词，将其保存在
 # 整体思路：首先获取词频字典，将所有单词保存在数组中。
@@ -13,17 +11,16 @@ import jieba
 # 同时注意保留特征数组。
 class MySVM:
 
-    def train(self, spamDict, hamDict, spamFilePath, hamFilePath):
+    def train2file(self, spamDict, hamDict, spamFilePath, hamFilePath):
         newspam = sorted(spamDict.items(), key=lambda d: d[1], reverse=True)[0:int(len(spamDict) / 2)]
         newham = sorted(hamDict.items(), key=lambda d: d[1], reverse=True)[0:int(len(hamDict) / 2)]
         wordListTupe = list(set(newspam + newham))
         spamFileList = os.listdir(spamFilePath)
         hamFileList = os.listdir(hamFilePath)
         fileNum = len(spamFileList) + len(hamFileList)
-        word = [[0 for k in range(len(wordListTupe))] for i in range(fileNum)]
+        word = [[0 for k in range(len(wordListTupe))] for i in range(fileNum+1)]
         for i in range(0, len(wordListTupe)):
             word[0][i] = wordListTupe[i][0]
-        print(word[0])
         k = 1  # 特征二维数组的行数，第0行为单词列表
 
         Eigenvalues = []
@@ -63,10 +60,30 @@ class MySVM:
                 if key in word[0]:
                     index = word[0].index(key)
                     word[k][index] = value
+        theword = word[0]
         del word[0]
         del Eigenvalues[0]
         array = np.array(word)
-        # array = array.transpose()
-        print(Eigenvalues)
-        np.savetxt("file.txt", array)
-        np.savetxt("Eigenvalues.txt",Eigenvalues)
+        Eigenvalues = np.array(Eigenvalues)
+
+        print("开始训练")
+        clf = svm.SVC()
+        clf.fit(array, Eigenvalues)
+        joblib.dump(clf, "./File/SVM_train_model.m")
+        print("训练结束")
+
+        f = open("./File/words.bin","wb")
+        pickle.dump(theword,f,True)
+        f.close()
+
+    def myPredict(self,fileDict):
+        clf = joblib.load("./File/SVM_train_model.m")
+        words = pickle.load(open("./File/words.bin","rb"))
+        test_X = [0 for k in range(len(words))]
+        for (key,value) in fileDict.items():
+            if key in words:
+                index = words.index(key)
+                test_X[index] = value
+        return (clf.predict(np.array(test_X).reshape(1,-1)))[0]
+
+

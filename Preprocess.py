@@ -1,6 +1,6 @@
 import jieba
 import os
-import csv
+import pickle
 from bayes.Bayes import Bayes
 
 from MySVM.MySVM import MySVM
@@ -16,15 +16,26 @@ class Preprocess:
 
     def __init__(self, hamFilePath, spamFilePath, stopWordsFilePath):
         __stopList = open(stopWordsFilePath, encoding="utf8").read().split()
-        self.__hamDict = self.__getWordDict(hamFilePath, __stopList)
-        self.__spamDict = self.__getWordDict(spamFilePath, __stopList)
-        self.__hamFileNum = len(os.listdir(hamFilePath))
-        self.__spamFileNum = len(os.listdir(spamFilePath))
-        self.__spamFilePath = spamFilePath
-        self.__hamFilePath = hamFilePath
-
+        # self.__hamDict = self.__getWordDict(hamFilePath, __stopList)
+        # self.__spamDict = self.__getWordDict(spamFilePath, __stopList)
+        # self.__hamFileNum = len(os.listdir(hamFilePath))
+        # self.__spamFileNum = len(os.listdir(spamFilePath))
+        # self.__spamFilePath = spamFilePath
+        # self.__hamFilePath = hamFilePath
+        # Dict = [self.__hamDict,self.__spamDict,self.__hamFileNum,self.__spamFileNum,self.__spamFilePath,hamFilePath]
+        # f = open("./File/Dict_data.bin","wb")
+        # pickle.dump(Dict,f,True)
+        # f.close()
+        Dict = pickle.load(open("./File/Dict_data.bin","rb"))
+        self.__hamDict = Dict[0]
+        self.__spamDict = Dict[1]
+        self.__hamFileNum = Dict[2]
+        self.__spamFileNum = Dict[3]
+        self.__spamFilePath = Dict[4]
+        self.__hamFilePath = Dict[5]
     # 针对单一文件的单一算法
     def getResult_1(self, algs, file):
+        global result
         fileDict = self.__getTestDict(file, self.__stopList)
         if algs == "bayes":
             bayes = Bayes()
@@ -32,7 +43,8 @@ class Preprocess:
 
         elif algs == "SVM":
             mySVM = MySVM()
-            result = mySVM.train(self.__spamDict, self.__hamDict, self.__spamFilePath, self.__hamFilePath)
+            # result = mySVM.train2file(self.__spamDict, self.__hamDict, self.__spamFilePath, self.__hamFilePath)
+            result = mySVM.myPredict(fileDict)
 
         elif algs == "KNN":
             pass
@@ -56,7 +68,7 @@ class Preprocess:
 
     def __getTestDict(self, file, stopList):
         wordDict = {}
-        res_list = open(file).read().split()
+        res_list = open(file,encoding="utf8").read().split()
         for i in res_list:
             if i not in stopList and i.strip() != '' and i != None:
                 if i in wordDict.keys():
